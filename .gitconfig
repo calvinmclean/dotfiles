@@ -1,0 +1,14 @@
+[user]
+	name = Calvin McLean
+	email = calvinlmc@gmail.com
+[pull]
+	ff = only
+[alias]
+	co = checkout
+	br = branch
+	c = commit
+	st = status
+        p = push
+        f = fetch
+[commit]
+	gpgsign = true
