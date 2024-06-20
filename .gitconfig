@@ -1,6 +1,7 @@
 [user]
 	name = Calvin McLean
 	email = calvinlmc@gmail.com
+	signingkey = /Users/calvinmclean/.ssh/id_rsa.pub
 [pull]
 	ff = only
 [alias]
@@ -12,3 +13,5 @@
         f = fetch
 [commit]
 	gpgsign = true
+[gpg]
+	format = ssh
