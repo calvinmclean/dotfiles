@@ -1,0 +1,18 @@
+version: '3'
+
+tasks:
+  docs:
+    cmd: open https://taskfile.dev/usage/
+
+  repush:
+    aliases: ["rp"]
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - git commit --amend --no-edit
+      - git push -f
+
+  checkout-pr:
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - git fetch source refs/pull-requests/{{ .CLI_ARGS }}/from:pr-{{ .CLI_ARGS }}
+      - git checkout pr-{{ .CLI_ARGS }}
