@@ -1,0 +1,20 @@
+{
+  "description": "Right CMD open terminal",
+  "manipulators": [
+    {
+      "from": {
+        "key_code": "right_command",
+        "modifiers": {
+          "optional": ["any"]
+        }
+      },
+      "to_if_alone": [
+        {
+          "key_code": "grave_accent_and_tilde",
+          "modifiers": ["left_control"]
+        }
+      ],
+      "type": "basic"
+    }
+  ]
+}
