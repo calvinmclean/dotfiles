@@ -9,8 +9,9 @@
 	br = branch
 	c = commit
 	st = status
-        p = push
-        f = fetch
+	p = push
+	f = fetch
+	r = rebase
 [commit]
 	gpgsign = true
 [gpg]
