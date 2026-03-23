@@ -1,0 +1,18 @@
+[
+  {
+    "context": "Pane",
+    "bindings": {
+      "ctrl-tab": "pane::ActivateNextItem",
+      "ctrl-shift-tab": "pane::ActivatePreviousItem",
+    },
+  },
+  {
+    "context": "(vim_mode == insert || vim_mode == normal) && !menu",
+    "bindings": {
+      "left": null,
+      "right": null,
+      "up": null,
+      "down": null,
+    },
+  },
+]
