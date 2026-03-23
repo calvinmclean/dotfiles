@@ -12,6 +12,7 @@
 	p = push
 	f = fetch
 	r = rebase
+	wt = worktree
 [commit]
 	gpgsign = true
 [gpg]
