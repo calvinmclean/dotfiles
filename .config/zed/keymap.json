@@ -15,4 +15,10 @@
       "down": null,
     },
   },
+  {
+    "context": "Editor && vim_mode == normal",
+    "bindings": {
+      ", b": "editor::ToggleBreakpoint",
+    },
+  },
 ]
