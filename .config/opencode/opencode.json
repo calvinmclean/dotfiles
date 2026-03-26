@@ -1,0 +1,31 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "permission": {
+    "*": "ask",
+    "bash": {
+      "go fmt *": "allow",
+      "go vet *": "allow",
+      "go test *": "allow",
+      "go mod *": "allow",
+      "go build *": "allow",
+      "git diff*": "allow",
+      "rm -rf *": "deny",
+      "ls *": "allow"
+    },
+    "grep*": "allow",
+    "todowrite": "allow",
+    "todoread": "allow",
+    "glob": {
+      "*": "allow"
+    },
+    "list": {
+      "*": "allow"
+    },
+    "edit": {
+      "*": "allow"
+    },
+    "read": {
+      "*": "allow"
+    }
+  }
+}
