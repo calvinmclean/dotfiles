@@ -1,0 +1,13 @@
+{
+  "description": "Right Shift -> Backspace",
+  "manipulators": [
+    {
+      "from": {
+        "key_code": "right_shift",
+        "modifiers": { "optional": ["any"] }
+      },
+      "to_if_alone": [{ "key_code": "delete_or_backspace" }],
+      "type": "basic"
+    }
+  ]
+}
