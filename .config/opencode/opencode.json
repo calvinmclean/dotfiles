@@ -10,9 +10,13 @@
       "go build *": "allow",
       "git diff*": "allow",
       "rm -rf *": "deny",
-      "ls *": "allow"
+      "ls *": "allow",
+      "sort *": "allow",
+      "head *": "allow",
+      "grep *": "allow",
+      "find *": "allow"
     },
-    "grep*": "allow",
+    "grep *": "allow",
     "todowrite": "allow",
     "todoread": "allow",
     "glob": {
