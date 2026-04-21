@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 tasks:
   docs:
@@ -6,13 +6,64 @@ tasks:
 
   repush:
     aliases: ["rp"]
-    dir: '{{.USER_WORKING_DIR}}'
+    dir: "{{.USER_WORKING_DIR}}"
     cmds:
       - git commit --amend --no-edit
       - git push -f
 
   checkout-pr:
-    dir: '{{.USER_WORKING_DIR}}'
+    dir: "{{.USER_WORKING_DIR}}"
     cmds:
       - git fetch source refs/pull-requests/{{ .CLI_ARGS }}/from:pr-{{ .CLI_ARGS }}
       - git checkout pr-{{ .CLI_ARGS }}
+
+  worktree:
+    desc: "Create a git worktree and tmux session for a branch"
+    aliases: ["wt"]
+    dir: "{{.USER_WORKING_DIR}}"
+    silent: true
+    summary: |
+      Creates a new git worktree at .worktrees/<branch> and starts
+      a named tmux session in that directory.
+    vars:
+      BRANCH: '{{.BRANCH | default ""}}'
+      PROJECT_NAME:
+        sh: basename $(git rev-parse --show-toplevel)
+      # Sanitize branch name: replace '/' and '.' with '-' for paths and session names
+      BRANCH_SLUG:
+        sh: echo "{{.BRANCH}}" | tr './' '--'
+      WORKTREE_PATH: "{{.USER_WORKING_DIR}}/.worktrees/{{.PROJECT_NAME}}-{{.BRANCH_SLUG}}"
+      SESSION_NAME: "{{.PROJECT_NAME}}-{{.BRANCH_SLUG}}"
+    preconditions:
+      - sh: '[ -n "{{.BRANCH}}" ]'
+        msg: "BRANCH is required. Usage: task worktree BRANCH=my-feature-branch"
+      - sh: "git rev-parse --git-dir > /dev/null 2>&1"
+        msg: "Not inside a git repository"
+      - sh: '[ ! -d "{{.WORKTREE_PATH}}" ]'
+        msg: "Worktree directory already exists at {{.WORKTREE_PATH}}"
+      - sh: '! tmux has-session -t "{{.SESSION_NAME}}" 2>/dev/null'
+        msg: "tmux session '{{.SESSION_NAME}}' already exists"
+    cmds:
+      - cmd: mkdir -p "{{.USER_WORKING_DIR}}/.worktrees"
+        silent: true
+      - cmd: |
+          echo "Creating worktree at {{.WORKTREE_PATH}}..."
+          # If the branch exists locally, check it out; otherwise create it
+          if git show-ref --verify --quiet refs/heads/{{.BRANCH}}; then
+            git worktree add "{{.WORKTREE_PATH}}" "{{.BRANCH}}"
+          else
+            git worktree add -b "{{.BRANCH}}" "{{.WORKTREE_PATH}}"
+          fi
+      - cmd: |
+          echo "Starting tmux session '{{.SESSION_NAME}}'..."
+          tmux new-session -d -s "{{.SESSION_NAME}}" -c "{{.WORKTREE_PATH}}"
+          # Set a helpful status-left so the session is self-describing
+          tmux set-option -t "{{.SESSION_NAME}}" status-left "[{{.SESSION_NAME}}] "
+      - cmd: |
+          echo ""
+          echo "Done!"
+          echo "   Worktree : {{.WORKTREE_PATH}}"
+          echo "   Branch   : {{.BRANCH}}"
+          echo "   Session  : {{.SESSION_NAME}}"
+          echo ""
+          echo "   Attach with: tmux attach -t {{.SESSION_NAME}}"
