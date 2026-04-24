@@ -33,7 +33,7 @@ tasks:
       BRANCH_SLUG:
         sh: echo "{{.BRANCH}}" | tr './' '--'
       WORKTREE_PATH: "{{.USER_WORKING_DIR}}/.worktrees/{{.PROJECT_NAME}}-{{.BRANCH_SLUG}}"
-      SESSION_NAME: "{{.PROJECT_NAME}}-{{.BRANCH_SLUG}}"
+      SESSION_NAME: "dev-{{.PROJECT_NAME}}-{{.BRANCH_SLUG}}"
     preconditions:
       - sh: '[ -n "{{.BRANCH}}" ]'
         msg: "BRANCH is required. Usage: task worktree BRANCH=my-feature-branch"
@@ -67,3 +67,42 @@ tasks:
           echo "   Session  : {{.SESSION_NAME}}"
           echo ""
           echo "   Attach with: tmux attach -t {{.SESSION_NAME}}"
+
+  list-worktree:
+    desc: Interactively select and print the path of a git worktree
+    aliases: ["lwt"]
+    dir: "{{ .USER_WORKING_DIR }}"
+    cmds:
+      - |
+        data=$(git -C {{ .USER_WORKING_DIR }} worktree list --porcelain | awk '/^worktree /{path=$2} /^branch /{branch=$2; sub(/refs\/heads\//, "", branch); print branch "\t" path}')
+        count=$(echo "$data" | wc -l | tr -d ' ')
+        if [ "$count" -lt 2 ]; then
+          echo "No additional worktrees found." >&2
+          exit 1
+        fi
+        echo "Select a worktree:" >&2
+        i=1
+        echo "$data" | while IFS=$'\t' read -r branch path; do
+          echo "  $i) $branch" >&2
+          i=$((i + 1))
+        done
+        printf "Enter number: " >&2
+        read -r choice
+        echo "$data" | sed -n "${choice}p" | cut -f2
+
+  tmux-dev:
+    desc: Create a detached tmux session in the current repo
+    aliases: ["tdev"]
+    dir: "{{ .TARGET_DIR }}"
+    vars:
+      TARGET_DIR: "{{ default .USER_WORKING_DIR .DIR }}"
+      REPO_NAME:
+        sh: basename "$(git -C "{{ .TARGET_DIR }}" rev-parse --show-toplevel 2>/dev/null)"
+      BRANCH_SLUG:
+        sh: git -C "{{ .TARGET_DIR }}" branch --show-current 2>/dev/null | sed 's|^[^/]*/||'
+    preconditions:
+      - sh: git -C "{{ .TARGET_DIR }}" rev-parse --is-inside-work-tree >/dev/null 2>&1
+        msg: "DIR must be inside a git repo (DIR defaults to current directory)"
+    cmds:
+      - tmux new-session -d -s "dev-{{ .REPO_NAME }}-{{ .BRANCH_SLUG }}" -c "{{ .TARGET_DIR }}"
+      - echo "Created tmux session dev-{{ .REPO_NAME }}-{{ .BRANCH_SLUG }}"
