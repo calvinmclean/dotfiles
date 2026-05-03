@@ -23,16 +23,18 @@ tasks:
     dir: "{{.USER_WORKING_DIR}}"
     silent: true
     summary: |
-      Creates a new git worktree at .worktrees/<branch> and starts
+      Creates a new git worktree at <git-root>/.worktrees/<branch> and starts
       a named tmux session in that directory.
     vars:
       BRANCH: '{{.BRANCH | default ""}}'
+      GIT_ROOT:
+        sh: git worktree list --porcelain | awk '/^worktree/{print $2; exit}'
       PROJECT_NAME:
-        sh: basename $(git rev-parse --show-toplevel)
+        sh: basename "{{.GIT_ROOT}}"
       # Sanitize branch name: replace '/' and '.' with '-' for paths and session names
       BRANCH_SLUG:
         sh: echo "{{.BRANCH}}" | tr './' '--'
-      WORKTREE_PATH: "{{.USER_WORKING_DIR}}/.worktrees/{{.PROJECT_NAME}}-{{.BRANCH_SLUG}}"
+      WORKTREE_PATH: "{{.GIT_ROOT}}/.worktrees/{{.PROJECT_NAME}}-{{.BRANCH_SLUG}}"
       SESSION_NAME: "dev-{{.PROJECT_NAME}}-{{.BRANCH_SLUG}}"
     preconditions:
       - sh: '[ -n "{{.BRANCH}}" ]'
@@ -44,7 +46,7 @@ tasks:
       - sh: '! tmux has-session -t "{{.SESSION_NAME}}" 2>/dev/null'
         msg: "tmux session '{{.SESSION_NAME}}' already exists"
     cmds:
-      - cmd: mkdir -p "{{.USER_WORKING_DIR}}/.worktrees"
+      - cmd: mkdir -p "{{.GIT_ROOT}}/.worktrees"
         silent: true
       - cmd: |
           echo "Creating worktree at {{.WORKTREE_PATH}}..."
