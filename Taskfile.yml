@@ -71,6 +71,7 @@ tasks:
           echo "   Attach with: tmux attach -t {{.SESSION_NAME}}"
 
   list-worktree:
+    silent: true
     desc: Interactively select and print the path of a git worktree (fuzzy)
     aliases: ["lwt"]
     dir: "{{ .USER_WORKING_DIR }}"
