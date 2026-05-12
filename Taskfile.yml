@@ -92,6 +92,40 @@ tasks:
         fi
         echo "$data" | awk -F'\t' -v branch="$selected" '$1 == branch {print $2}'
 
+  delete-worktree:
+    desc: Interactively select and delete a git worktree and its branch (fuzzy)
+    aliases: ["dwt"]
+    dir: "{{ .USER_WORKING_DIR }}"
+    preconditions:
+      - sh: command -v fzf >/dev/null 2>&1
+        msg: "fzf is required. Install with: brew install fzf"
+    cmds:
+      - |
+        data=$(git -C "{{ .USER_WORKING_DIR }}" worktree list --porcelain | awk 'BEGIN { first=1 } /^worktree /{path=$0; sub(/^worktree /, "", path)} /^branch /{branch=$2; sub(/refs\/heads\//, "", branch); if (first) { first=0; next } print branch "\t" path}')
+        if [ -z "$data" ]; then
+          echo "No additional worktrees found." >&2
+          exit 1
+        fi
+
+        selected=$(echo "$data" | fzf --prompt="Delete worktree> " --height=40% --reverse)
+        if [ -z "$selected" ]; then
+          exit 1
+        fi
+
+        branch=$(echo "$selected" | awk -F'\t' '{print $1}')
+        path=$(echo "$selected" | awk -F'\t' '{print $2}')
+
+        printf 'Delete worktree %s and branch %s? [y/N] ' "$path" "$branch" >&2
+        read answer
+        case "$answer" in
+          [yY]|[yY][eE][sS]) ;;
+          *) echo "Aborted."; exit 1 ;;
+        esac
+
+        git -C "{{ .USER_WORKING_DIR }}" worktree remove "$path"
+        git -C "{{ .USER_WORKING_DIR }}" branch -D "$branch"
+        echo "Removed worktree $path and branch $branch"
+
   tmux-dev:
     desc: Create a detached tmux session in the current repo
     aliases: ["tdev"]
