@@ -1,5 +1,7 @@
 version: "3"
 
+silent: true
+
 tasks:
   docs:
     cmd: open https://taskfile.dev/usage/
