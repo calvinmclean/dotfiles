@@ -6,13 +6,6 @@ tasks:
   docs:
     cmd: open https://taskfile.dev/usage/
 
-  repush:
-    aliases: ["rp"]
-    dir: "{{.USER_WORKING_DIR}}"
-    cmds:
-      - git commit --amend --no-edit
-      - git push -f
-
   checkout-pr:
     dir: "{{.USER_WORKING_DIR}}"
     cmds:
