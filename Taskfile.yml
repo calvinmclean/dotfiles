@@ -53,7 +53,11 @@ tasks:
           fi
       - cmd: |
           echo "Starting tmux session '{{.SESSION_NAME}}'..."
+          {{if .CLI_ARGS_LIST}}
+          tmux new-session -d -s "{{.SESSION_NAME}}" -c "{{.WORKTREE_PATH}}" fish -c '$argv; exec fish' {{range .CLI_ARGS_LIST}}{{. | shellQuote}} {{end}}
+          {{else}}
           tmux new-session -d -s "{{.SESSION_NAME}}" -c "{{.WORKTREE_PATH}}"
+          {{end}}
           # Set a helpful status-left so the session is self-describing
           tmux set-option -t "{{.SESSION_NAME}}" status-left "[{{.SESSION_NAME}}] "
       - cmd: |
@@ -135,5 +139,10 @@ tasks:
       - sh: git -C "{{ .TARGET_DIR }}" rev-parse --is-inside-work-tree >/dev/null 2>&1
         msg: "DIR must be inside a git repo (DIR defaults to current directory)"
     cmds:
-      - tmux new-session -d -s "dev-{{ .REPO_NAME }}-{{ .BRANCH_SLUG }}" -c "{{ .TARGET_DIR }}"
+      - |
+        {{if .CLI_ARGS_LIST}}
+        tmux new-session -d -s "dev-{{ .REPO_NAME }}-{{ .BRANCH_SLUG }}" -c "{{ .TARGET_DIR }}" fish -c '$argv; exec fish' {{range .CLI_ARGS_LIST}}{{. | shellQuote}} {{end}}
+        {{else}}
+        tmux new-session -d -s "dev-{{ .REPO_NAME }}-{{ .BRANCH_SLUG }}" -c "{{ .TARGET_DIR }}"
+        {{end}}
       - echo "Created tmux session dev-{{ .REPO_NAME }}-{{ .BRANCH_SLUG }}"
