@@ -13,6 +13,7 @@
             "head*": "allow",
             "grep*": "allow",
             "rg*": "allow",
+            "pwd": "allow",
 
             // Go
             "go fmt *": "allow",
