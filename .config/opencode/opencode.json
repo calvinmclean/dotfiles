@@ -1,68 +1,90 @@
 {
-  "$schema": "https://opencode.ai/config.json",
-  "lsp": true,
-  "permission": {
-    "*": "ask",
-    "bash": {
-      "go fmt *": "allow",
-      "go vet *": "allow",
-      "go env *": "allow",
-      "go test *": "allow",
-      "go mod *": "allow",
-      "go build *": "allow",
-      "gofmt *": "allow",
-      "g *": "deny",
-      "git push*": "deny",
-      "git pull*": "deny",
-      "git commit*": "ask",
-      "git status*": "allow",
-      "git log*": "allow",
-      "git blame*": "allow",
-      "git show*": "allow",
-      "git diff*": "allow",
-      "git rev-parse*": "allow",
-      "git worktree list*": "allow",
-      "git rebase --show-current-patch": "allow",
-      "rm -rf *": "deny",
-      "ls *": "allow",
-      "sort *": "allow",
-      "head *": "allow",
-      "grep *": "allow",
-      "find *": "allow",
-      "gh pr view *": "allow",
-      "gh issue view *": "allow",
-      "gh pr checks *": "allow",
-      "gh pr diff *": "allow",
-      "pnpm run check*": "allow",
-      "pnpm run lint*": "allow",
-      "pnpm exec prettier*": "allow",
-      "sqlite3 -readonly*": "allow"
+    "$schema": "https://opencode.ai/config.json",
+    "lsp": true,
+    "permission": {
+        "*": "ask",
+        "bash": {
+            // Always Deny!
+            "rm -rf *": "deny",
+
+            // Basic utilities
+            "ls*": "allow",
+            "sort*": "allow",
+            "head*": "allow",
+            "grep*": "allow",
+            "rg*": "allow",
+
+            // Go
+            "go fmt *": "allow",
+            "go vet *": "allow",
+            "go env *": "allow",
+            "go test *": "allow",
+            "go mod *": "allow",
+            "go generate*": "allow",
+            "go build *": "allow",
+            "gofmt *": "allow",
+
+            // Git
+            "g *": "deny",
+            "git push*": "deny",
+            "git pull*": "deny",
+            "git commit*": "ask",
+            "git status*": "allow",
+            "git log*": "allow",
+            "git blame*": "allow",
+            "git show*": "allow",
+            "git diff*": "allow",
+            "git rev-parse*": "allow",
+            "git ls-tree*": "allow",
+            "git worktree list*": "allow",
+            "git rebase --show-current-patch": "allow",
+
+            // Github CLI
+            "gh pr view*": "allow",
+            "gh pr list*": "allow",
+            "gh search*": "allow",
+            "gh issue view*": "allow",
+            "gh issue list*": "allow",
+            "gh pr checks*": "allow",
+            "gh pr diff*": "allow",
+
+            // pnpm
+            "pnpm run check*": "allow",
+            "pnpm run lint*": "allow",
+            "pnpm exec prettier*": "allow",
+
+            // other
+            "sqlite3 -readonly*": "allow",
+            "amgr *": "allow",
+            "task agents:unresolved-review-threads*": "allow"
+        },
+        "grep *": "allow",
+        "todowrite": "allow",
+        "todoread": "allow",
+        "skill": {
+            "*": "allow"
+        },
+        "glob": {
+            "*": "allow"
+        },
+        "list": {
+            "*": "allow"
+        },
+        "edit": {
+            "*": "allow"
+        },
+        "read": {
+            "*": "allow"
+        },
+        "codebase-memory-mcp_*": "allow"
     },
-    "grep *": "allow",
-    "todowrite": "allow",
-    "todoread": "allow",
-    "skill": {
-      "*": "allow"
-    },
-    "glob": {
-      "*": "allow"
-    },
-    "list": {
-      "*": "allow"
-    },
-    "edit": {
-      "*": "allow"
-    },
-    "read": {
-      "*": "allow"
-    },
-    "codebase-memory-mcp_*": "allow"
-  },
-  "mcp": {
-    "codebase-memory-mcp": {
-      "enabled": true,
-      "type": "local",
-      "command": ["/Users/calvinmclean/.local/bin/codebase-memory-mcp"]
+    "mcp": {
+        "codebase-memory-mcp": {
+            "enabled": true,
+            "type": "local",
+            "command": [
+                "/Users/calvinmclean/.local/bin/codebase-memory-mcp"
+            ]
+        }
     }
-  }
 }
