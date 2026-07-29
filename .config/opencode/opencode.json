@@ -38,6 +38,8 @@
             "git ls-tree*": "allow",
             "git worktree list*": "allow",
             "git rebase --show-current-patch": "allow",
+            "git remote -v" : "allow",
+            "git branch --show-current" : "allow",
 
             // Github CLI
             "gh pr view*": "allow",
