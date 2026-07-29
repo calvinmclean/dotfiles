@@ -35,6 +35,7 @@
             "git blame*": "allow",
             "git show*": "allow",
             "git diff*": "allow",
+            "git grep*": "allow",
             "git rev-parse*": "allow",
             "git ls-tree*": "allow",
             "git worktree list*": "allow",
