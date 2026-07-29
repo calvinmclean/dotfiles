@@ -49,6 +49,7 @@
             "gh issue list*": "allow",
             "gh pr checks*": "allow",
             "gh pr diff*": "allow",
+            "gh repo view*": "allow",
 
             // pnpm
             "pnpm run check*": "allow",
