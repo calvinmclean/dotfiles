@@ -60,7 +60,7 @@
 
             // other
             "sqlite3 -readonly*": "allow",
-            "amgr *": "allow",
+            "am *": "allow",
             "task agents:unresolved-review-threads*": "allow"
         },
         "grep *": "allow",
