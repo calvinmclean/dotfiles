@@ -24,6 +24,7 @@
             "go generate*": "allow",
             "go build *": "allow",
             "gofmt *": "allow",
+            "golangci-lint*": "allow",
 
             // Git
             "g *": "deny",
