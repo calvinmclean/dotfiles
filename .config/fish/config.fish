@@ -1,6 +1,8 @@
 alias t='task'
 alias g='git'
 alias zwt='z (t lwt)'
+alias tm='tmux'
+alias cd='z'
 
 set --export EDITOR vim
 set --export --prepend PATH "/Users/calvinmclean/go/bin"
