@@ -1,0 +1,201 @@
+prefix_rule(
+    pattern = ["ls"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["sort"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["head"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["grep"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["rg"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["pwd"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["git", "status"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["git", "log"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["git", "blame"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["git", "show"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["git", "grep"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["git", "diff"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["git", "rev-parse"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["git", "ls-tree"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["git", "worktree", "list"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["git", "rebase", "--show-current-patch"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["git", "remote", "-v"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["git", "branch", "--show-current"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["git", "commit"],
+    decision = "prompt",
+)
+prefix_rule(
+    pattern = ["git", "pull"],
+    decision = "forbidden",
+)
+prefix_rule(
+    pattern = ["git", "push"],
+    decision = "forbidden",
+)
+prefix_rule(
+    pattern = ["go", "fmt"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["go", "vet"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["go", "env"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["go", "test"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["go", "mod"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["go", "generate"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["go", "build"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["gofmt"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["golangci-lint"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["gh"],
+    decision = "prompt",
+)
+prefix_rule(
+    pattern = ["gh", "pr", "view"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["gh", "pr", "list"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["gh", "search"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["gh", "issue", "view"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["gh", "issue", "list"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["gh", "pr", "checks"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["gh", "pr", "diff"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["gh", "repo", "view"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["pnpm", "run", "check"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["pnpm", "run", "lint"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["pnpm", "exec", "prettier"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["kubectl"],
+    decision = "prompt",
+)
+prefix_rule(
+    pattern = ["aws"],
+    decision = "prompt",
+)
+prefix_rule(
+    pattern = ["gcloud"],
+    decision = "prompt",
+)
+prefix_rule(
+    pattern = ["rm", "-rf"],
+    decision = "forbidden",
+)
+prefix_rule(
+    pattern = ["g"],
+    decision = "forbidden",
+)
+prefix_rule(
+    pattern = ["sqlite3", "-readonly"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["am"],
+    decision = "allow",
+)
+prefix_rule(
+    pattern = ["task", "agents:unresolved-review-threads"],
+    decision = "allow",
+)
+

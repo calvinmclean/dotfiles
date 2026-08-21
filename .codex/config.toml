@@ -1,0 +1,41 @@
+approval_policy = 'on-request'
+sandbox_mode = 'workspace-write'
+
+[tui]
+vim_mode_default = true
+status_line = ["model-with-reasoning", "current-dir", "context-remaining"]
+status_line_use_colors = true
+
+[mcp_servers]
+
+[mcp_servers.codebase-memory-mcp]
+command = "/Users/calvinmclean/.local/bin/codebase-memory-mcp"
+
+[mcp_servers.codebase-memory-mcp.tools.detect_changes]
+approval_mode = "approve"
+
+[mcp_servers.codebase-memory-mcp.tools.get_architecture]
+approval_mode = "approve"
+
+[mcp_servers.codebase-memory-mcp.tools.get_code_snippet]
+approval_mode = "approve"
+
+[mcp_servers.codebase-memory-mcp.tools.index_repository]
+approval_mode = "approve"
+
+[mcp_servers.codebase-memory-mcp.tools.list_projects]
+approval_mode = "approve"
+
+[mcp_servers.codebase-memory-mcp.tools.search_code]
+approval_mode = "approve"
+
+[mcp_servers.codebase-memory-mcp.tools.search_graph]
+approval_mode = "approve"
+
+[mcp_servers.codebase-memory-mcp.tools.trace_path]
+approval_mode = "approve"
+
+[sandbox_workspace_write]
+network_access = true
+writable_roots = ['/Users/calvinmclean/go/pkg/mod']
+
