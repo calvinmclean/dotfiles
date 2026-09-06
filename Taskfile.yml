@@ -146,3 +146,45 @@ tasks:
         tmux new-session -d -s "dev-{{ .REPO_NAME }}-{{ .BRANCH_SLUG }}" -c "{{ .TARGET_DIR }}"
         {{end}}
       - echo "Created tmux session dev-{{ .REPO_NAME }}-{{ .BRANCH_SLUG }}"
+
+  tinygo-zed:
+    desc: Configure Zed's gopls to use TinyGo's merged GOROOT
+    dir: "{{.USER_WORKING_DIR}}"
+    vars:
+      TINYGO_TARGET: pico-w
+      ZED_SETTINGS: .zed/settings.json
+      TIMESTAMP:
+        sh: date +%s
+      GOROOT:
+        sh: |
+          tinygo info -target={{.TINYGO_TARGET}} | sed -n 's/^cached GOROOT: *//p'
+      GOOS:
+        sh: |
+          tinygo info -target={{.TINYGO_TARGET}} | sed -n 's/^GOOS: *//p'
+      GOARCH:
+        sh: |
+          tinygo info -target={{.TINYGO_TARGET}} | sed -n 's/^GOARCH: *//p'
+      TAGS:
+        sh: |
+          tinygo info -target={{.TINYGO_TARGET}} | sed -n 's/^build tags: *//p' | tr ' ' ','
+    cmds:
+      - mkdir -p .zed
+      - test -f {{.ZED_SETTINGS}} || echo '{}' > {{.ZED_SETTINGS}}
+      - |
+        cp {{.ZED_SETTINGS}} $(dirname {{.ZED_SETTINGS}})/{{.TIMESTAMP}}-$(basename {{.ZED_SETTINGS}}).bak
+      - |
+        jq --arg goroot "{{.GOROOT}}" \
+           --arg goos "{{.GOOS}}" \
+           --arg goarch "{{.GOARCH}}" \
+           --arg tags "-tags={{.TAGS}}" \
+           '.lsp.gopls.binary.env.GOROOT = $goroot
+            | .lsp.gopls.binary.env.GOOS = $goos
+            | .lsp.gopls.binary.env.GOARCH = $goarch
+            | .lsp.gopls.binary.env.GOFLAGS = $tags
+            | .lsp.gopls.initialization_options.buildFlags = [$tags]
+            | .lsp.gopls.initialization_options.env.GOROOT = $goroot
+            | .lsp.gopls.initialization_options.env.GOOS = $goos
+            | .lsp.gopls.initialization_options.env.GOARCH = $goarch' \
+           {{.ZED_SETTINGS}} > {{.ZED_SETTINGS}}.tmp
+      - mv {{.ZED_SETTINGS}}.tmp {{.ZED_SETTINGS}}
+      - echo "✓ {{.ZED_SETTINGS}} updated with GOROOT={{.GOROOT}}"
