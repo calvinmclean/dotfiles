@@ -8,26 +8,31 @@ tasks:
 
   gnotes:
     desc: Create this week's gnotes and open the previous and current notes in tmux
+    vars:
+      HOME_DIR: '{{.HOME_DIR | default .HOME}}'
     preconditions:
-      - sh: test -d "$HOME/notes"
-        msg: "~/notes does not exist"
+      - sh: test -d "{{.HOME_DIR}}/notes"
+        msg: "{{.HOME_DIR}}/notes does not exist"
       - sh: command -v gnotes >/dev/null && command -v jq >/dev/null && command -v tmux >/dev/null && command -v vim >/dev/null
         msg: "gnotes, jq, tmux, and vim are required"
+      - sh: '! tmux has-session -t =gnotes 2>/dev/null'
+        msg: "tmux session 'gnotes' already exists"
     cmds:
       - |
-        cd "$HOME/notes"
+        cd "{{.HOME_DIR}}/notes"
         output="$(gnotes --output)"
         previous_title="$(printf '%s' "$output" | jq -er '.previous.title')"
         current_title="$(printf '%s' "$output" | jq -er '.current.title')"
         previous_vim="$(printf '%s' "$output" | jq -er '"vim " + (.previous.file | @sh)')"
         current_vim="$(printf '%s' "$output" | jq -er '"vim " + (.current.file | @sh)')"
 
-        session="$(tmux new-session -dP -F '#S' -n "$previous_title" -c "$HOME/notes" "$previous_vim")"
+        session=gnotes
+        tmux new-session -d -s "$session" -n "$previous_title" -c "{{.HOME_DIR}}/notes" "$previous_vim"
         previous_window="$(tmux list-windows -t "$session" -F '#I')"
         if [ "$previous_window" != 0 ]; then
           tmux move-window -s "$session:$previous_window" -t "$session:0"
         fi
-        tmux new-window -t "$session:1" -n "$current_title" -c "$HOME/notes" "$current_vim"
+        tmux new-window -t "$session:1" -n "$current_title" -c "{{.HOME_DIR}}/notes" "$current_vim"
         echo "Created tmux session $session"
 
   checkout-pr:
