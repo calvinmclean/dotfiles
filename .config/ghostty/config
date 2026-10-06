@@ -1,2 +1,2 @@
-command = /opt/homebrew/bin/fish --login --interactive
+command = /opt/homebrew/bin/fish --login --interactive -C 'source ~/.config/ghostty/tmux-shortcuts.fish'
 keybind = global:shift+opt+t=toggle_quick_terminal
