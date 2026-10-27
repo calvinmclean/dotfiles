@@ -1,0 +1,22 @@
+version: '3'
+
+vars:
+  IMAGE: discotime:fish
+
+tasks:
+  default:
+    desc: List available tasks
+    cmds:
+      - task --list
+
+  build:
+    desc: Build the sandbox image with dotfiles, fish, tuicr, and Task (DISCOBOX_VERSION=vX.Y.Z)
+    requires:
+      vars: [DISCOBOX_VERSION]
+    env:
+      DISCOBOX_VERSION: '{{.DISCOBOX_VERSION}}'
+      IMAGE: '{{.IMAGE}}'
+      DOCKERFILE: '{{.TASKFILE_DIR}}/Dockerfile'
+      BUILD_CONTEXT: '{{.TASKFILE_DIR}}/..'
+    cmds:
+      - docker build --file "$DOCKERFILE" --build-arg "DISCOBOX_VERSION=$DISCOBOX_VERSION" --tag "$IMAGE" "$BUILD_CONTEXT"
