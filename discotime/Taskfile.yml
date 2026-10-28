@@ -1,7 +1,7 @@
 version: '3'
 
 vars:
-  IMAGE: discotime:fish
+  IMAGE_REPO: ghcr.io/calvinmclean/discotime
 
 tasks:
   default:
@@ -10,13 +10,52 @@ tasks:
       - task --list
 
   build:
-    desc: Build the sandbox image with dotfiles, fish, tuicr, and Task (DISCOBOX_VERSION=vX.Y.Z)
+    desc: Build all customized harness images (DISCOBOX_VERSION=vX.Y.Z)
     requires:
       vars: [DISCOBOX_VERSION]
+    cmds:
+      - task: build:shell
+      - task: build:claude-code
+      - task: build:codex
+
+  build:shell:
+    desc: Build the customized shell harness image
+    cmds:
+      - task: build:harness
+        vars: {HARNESS: shell}
+
+  build:claude-code:
+    desc: Build the customized Claude Code harness image
+    cmds:
+      - task: build:harness
+        vars: {HARNESS: claude-code}
+
+  build:codex:
+    desc: Build the customized Codex harness image
+    cmds:
+      - task: build:harness
+        vars: {HARNESS: codex}
+
+  build:harness:
+    internal: true
+    requires:
+      vars:
+        - DISCOBOX_VERSION
+        - name: HARNESS
+          enum: [shell, claude-code, codex]
     env:
-      DISCOBOX_VERSION: '{{.DISCOBOX_VERSION}}'
-      IMAGE: '{{.IMAGE}}'
+      BASE_IMAGE: 'ghcr.io/discobox-ai/discobox-harness-{{.HARNESS}}:{{.DISCOBOX_VERSION}}'
+      IMAGE: '{{.IMAGE_REPO}}:{{.HARNESS}}'
       DOCKERFILE: '{{.TASKFILE_DIR}}/Dockerfile'
       BUILD_CONTEXT: '{{.TASKFILE_DIR}}/..'
     cmds:
-      - docker build --file "$DOCKERFILE" --build-arg "DISCOBOX_VERSION=$DISCOBOX_VERSION" --tag "$IMAGE" "$BUILD_CONTEXT"
+      - docker build --file "$DOCKERFILE" --build-arg "BASE_IMAGE=$BASE_IMAGE" --tag "$IMAGE" "$BUILD_CONTEXT"
+
+  push:
+    desc: Push all customized harness images to IMAGE_REPO
+    env:
+      IMAGE_REPO: '{{.IMAGE_REPO}}'
+    cmds:
+      - docker push "$IMAGE_REPO:shell"
+      - docker push "$IMAGE_REPO:claude-code"
+      - docker push "$IMAGE_REPO:codex"

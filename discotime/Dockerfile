@@ -1,5 +1,5 @@
-ARG DISCOBOX_VERSION=v0.18.0
-FROM ghcr.io/discobox-ai/discobox-sandbox-agent:${DISCOBOX_VERSION}
+ARG BASE_IMAGE=ghcr.io/discobox-ai/discobox-harness-shell:v0.18.0
+FROM ${BASE_IMAGE}
 
 USER root
 RUN apt-get update \
