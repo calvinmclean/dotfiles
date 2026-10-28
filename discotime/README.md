@@ -13,8 +13,12 @@ private keys are not included. Fish uses `$HOME/go/bin` and adds Homebrew's path
 only when it exists.
 
 The build uses the repository root as its context, with an allowlist in
-`Dockerfile.dockerignore`. Existing sandbox homes keep their current configs;
-create a new box using the rebuilt image to pick up dotfile changes.
+`Dockerfile.dockerignore`. After Discobox wires the home and cache volumes, a
+`discobox-wire.service` post-start step copies missing files from `/etc/skel`
+as the sandbox user. This also works when mountpoint directories already make
+the home nonempty, causing Discobox's own skeleton seeding to skip it. Existing
+configs are preserved. Rebuild the images and create a new box (or upgrade an
+existing box) to install the step; it fills missing files on each boot.
 
 Run these tasks from `discotime/`, with the version matching your Discobox release:
 

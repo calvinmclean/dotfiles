@@ -9,3 +9,6 @@
 !.tmux.conf
 !.gitconfig
 !.gitignore_global
+!discotime/
+!discotime/seed-dotfiles.sh
+!discotime/seed-dotfiles.conf
