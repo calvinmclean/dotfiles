@@ -2,7 +2,7 @@ alias t='task'
 alias g='git'
 alias tm='tmux'
 
-function discotime --description 'Run Discobox with customized harness images'
+function discobox --wraps discobox --description 'Run Discobox with customized harness images'
     env DISCOBOX_HARNESS_SHELL_IMAGE=ghcr.io/calvinmclean/discotime:shell \
         DISCOBOX_HARNESS_CLAUDE_CODE_IMAGE=ghcr.io/calvinmclean/discotime:claude-code \
         DISCOBOX_HARNESS_CODEX_IMAGE=ghcr.io/calvinmclean/discotime:codex \

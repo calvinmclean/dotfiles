@@ -38,14 +38,13 @@ Set `IMAGE_REPO=registry.example.com/discotime` on build and push to use another
 repository; update the fish function's references to match. The pool's Docker
 daemon must be able to pull these images.
 
-Reload your local fish config, then use `discotime` wherever you would use
-`discobox`:
+Reload your local fish config, then use `discobox` with the customized images:
 
 ```fish
 source ~/.config/fish/config.fish
-discotime
+discobox
 # Arguments are forwarded unchanged:
-discotime admin server
+discobox admin server
 ```
 
 The function sets these environment variables for the command and its children:
