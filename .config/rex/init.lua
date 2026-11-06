@@ -20,20 +20,11 @@ rex.bind("alt+f>x", "pane.close")
 -- Session management
 rex.bind("alt+f>s", "session.switch")
 
--- Navigation
--- Opt+F → j: next pane
-rex.bind("alt+f>j", function()
-  local result, err = rex.session.focus_next_pane{}
-  if err then rex.log("error", err) end
-  return true
-end)
-
--- Opt+F → k: previous pane
-rex.bind("alt+f>k", function()
-  local result, err = rex.session.focus_previous_pane{}
-  if err then rex.log("error", err) end
-  return true
-end)
+-- Directional pane navigation
+rex.bind("alt+f>h", "pane.focus.left")
+rex.bind("alt+f>j", "pane.focus.down")
+rex.bind("alt+f>k", "pane.focus.up")
+rex.bind("alt+f>l", "pane.focus.right")
 
 -- Double Option+F to send Option+F to terminal
 rex.bind("alt+f>alt+f", "pane.send_key", {
